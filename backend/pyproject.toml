@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "exam"
+version = "0.1.0"
+description = "This is exam"
+authors = ["Haruto Sasaki <muromisann6633.com>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.110.1"
+uvicorn = "^0.29.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
