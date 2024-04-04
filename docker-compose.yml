@@ -16,7 +16,6 @@ services:
       - 8081:8000
     command: bash
     tty: true
-    command: sh -c ""
   db:
     image: mysql:8.0
     environment:

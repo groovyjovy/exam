@@ -4,9 +4,19 @@
 本リポジトリは課題として示された目標を達成するためのリポジトリです
 
 ## 環境構築
-1. `docker compose up -d`
-2. `docker compose exec api bash`
-3. `poetry run uvicorn src.main:app --host 0.0.0.0 --reload`
+- 前提条件
+1. コンテナをビルド、立ち上げ
+    ```
+    docker compose up -d
+    ```
+2. コンテナに入る
+    ```
+    docker compose exec api bash
+    ```
+3. サーバーを起動
+    ```
+    poetry run uvicorn src.main:app --host 0.0.0.0 --reload
+    ```
 
 ### DBのmigration実行方法
 
