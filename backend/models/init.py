@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from datetime import datetime 
 
 Base = declarative_base()
 
@@ -11,8 +12,8 @@ class Book(Base):
     title = Column(String(255))
     author = Column(String(255))
     price = Column(Integer)
-    created_at = Column(DateTime)
-    updated_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) 
     reviews = relationship('Review', back_populates='book')
     tags = relationship('Tag', secondary='book_tag', back_populates='books')
 
@@ -22,8 +23,8 @@ class Tag(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
     description = Column(String(255))
-    created_at = Column(DateTime)
-    updated_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) 
     books = relationship('Book', secondary='book_tag', back_populates='tags')
 
 class Review(Base):
@@ -34,8 +35,8 @@ class Review(Base):
     reviewer_name = Column(String(255))
     content = Column(Text)
     rating = Column(Integer)
-    created_at = Column(DateTime)
-    updated_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) 
     book = relationship('Book', back_populates='reviews')
 
 class BookTag(Base):
@@ -44,5 +45,5 @@ class BookTag(Base):
     id = Column(Integer, primary_key=True)
     book_id = Column(Integer, ForeignKey('books.id'))
     tag_id = Column(Integer, ForeignKey('tags.id'))
-    created_at = Column(DateTime)
-    updated_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) 
