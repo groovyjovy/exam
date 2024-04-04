@@ -8,6 +8,24 @@
 2. `docker compose exec api bash`
 3. `poetry run uvicorn src.main:app --host 0.0.0.0 --reload`
 
+### DBのmigration実行方法
+
+- 最新バージョンへのmigarate。引数を変えればそのバージョンにmigrate可能
+    ```
+    alembic upgrade head
+    ```
+- migrationの初期化。引数を変えればそのバージョンにrollback可能
+    ```
+    alembic downgrade base
+    ```
+- 現在のバージョンの確認方法。DBを直接みても確認できる
+    ```
+    alembic history
+    ```
+    ```
+    select * from  alembic_version;
+    ```
+
 ## なんとなくの構成、というか盛り込みたい要素
 - logをs3に出す
 - lamdaでfastapiを動作させる
