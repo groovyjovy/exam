@@ -1,4 +1,3 @@
-from datetime import datetime
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -46,7 +45,7 @@ def test_index():
 def test_show():
     # 事前にテスト用のデータを挿入
     db = TestingSessionLocal()
-    test_book = Book(title="Test Show", author="Author Show", price=200, created_at=datetime.now(), updated_at=datetime.now())
+    test_book = Book(title="Test Show", author="Author Show", price=200)
     db.add(test_book)
     db.commit()
     db.refresh(test_book)
@@ -66,7 +65,7 @@ def test_show():
 def test_update():
     # 事前にテスト用のデータを挿入
     db = TestingSessionLocal()
-    test_book = Book(title="Test Update", author="Author Update", price=300, created_at=datetime.now(), updated_at=datetime.now())
+    test_book = Book(title="Test Update", author="Author Update", price=300)
     db.add(test_book)
     db.commit()
     db.refresh(test_book)
