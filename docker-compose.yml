@@ -30,5 +30,16 @@ services:
       - ./db/conf.d:/etc/mysql/conf.d
     ports:
       - 3306:3306
+  front:
+    build:
+      context: ./front/
+      dockerfile: Dockerfile
+    # command: sh -c "cd vite-app && npm run dev"
+    ports:
+      - 4000:5173
+    volumes:
+      - ./front:/app
+    stdin_open: true
+    tty: true
 volumes:
   db-store:
