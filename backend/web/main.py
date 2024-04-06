@@ -6,13 +6,22 @@ from models.init import Book
 
 app = FastAPI()
 
-class BookData(BaseModel):
+class BookCreateData(BaseModel):
     title: str
     author: str
     price: int
 
 class BookCreate(BaseModel):
-    book: BookData
+    book: BookCreateData
+
+class BookUpdateData(BaseModel):
+    id: int
+    title: str
+    author: str
+    price: int
+
+class BookUpdate(BaseModel):
+    book: BookUpdateData
 
 # データベースセッションの依存関係
 def get_db():
@@ -21,10 +30,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-@app.get("/")
-def read_root():
-    return {"message": "Hello World"}
 
 @app.get("/health-check")
 def health_check():
@@ -41,20 +46,20 @@ def create(book_create: BookCreate, response: Response, db: Session = Depends(ge
     response.headers["Location"] = f"/books/{db_book.id}"
     return db_book
 
-@app.get("/books", response_model=list[BookData], status_code=status.HTTP_200_OK)
+@app.get("/books", response_model=list[BookUpdateData], status_code=status.HTTP_200_OK)
 def index(db: Session = Depends(get_db)):
     books = db.query(Book).all()
     return books
 
-@app.get("/books/{book_id}", response_model=BookData, status_code=status.HTTP_200_OK)
+@app.get("/books/{book_id}", response_model=BookUpdateData, status_code=status.HTTP_200_OK)
 def show(book_id: int, db: Session = Depends(get_db)):
     book = db.get(Book, book_id)
     if book is None:
         raise HTTPException(status_code=404, detail="Book not found")
     return book
 
-@app.put("/books/{book_id}", response_model=BookData, status_code=status.HTTP_200_OK)
-def update(book_id: int, book_update: BookCreate, db: Session = Depends(get_db)):
+@app.put("/books/{book_id}", response_model=BookUpdateData, status_code=status.HTTP_200_OK)
+def update(book_id: int, book_update: BookUpdate, db: Session = Depends(get_db)):
     db_book = db.get(Book, book_id)
     if db_book is None:
         raise HTTPException(status_code=404, detail="Book not found")

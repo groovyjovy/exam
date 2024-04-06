@@ -70,7 +70,7 @@ def test_update():
     db.commit()
     db.refresh(test_book)
 
-    response = client.put(f"/books/{test_book.id}", json={"book": {"title": "Updated Title", "author": "Updated Author", "price": 400}})
+    response = client.put(f"/books/{test_book.id}", json={"book": {"id": test_book.id, "title": "Updated Title", "author": "Updated Author", "price": 400}})
     assert response.status_code == 200
     data = response.json()
     assert data['title'] == "Updated Title"
