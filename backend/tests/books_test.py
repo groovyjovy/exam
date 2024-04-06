@@ -53,6 +53,7 @@ def test_show():
     response = client.get(f"/books/{test_book.id}")
     assert response.status_code == 200
     data = response.json()
+    assert data['id'] == test_book.id
     assert data['title'] == "Test Show"
     assert data['author'] == "Author Show"
     assert data['price'] == 200
@@ -73,6 +74,7 @@ def test_update():
     response = client.put(f"/books/{test_book.id}", json={"book": {"id": test_book.id, "title": "Updated Title", "author": "Updated Author", "price": 400}})
     assert response.status_code == 200
     data = response.json()
+    assert data['id'] == test_book.id
     assert data['title'] == "Updated Title"
     assert data['author'] == "Updated Author"
     assert data['price'] == 400
