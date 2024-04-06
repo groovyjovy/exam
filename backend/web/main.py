@@ -23,7 +23,6 @@ class BookUpdateData(BaseModel):
 class BookUpdate(BaseModel):
     book: BookUpdateData
 
-# データベースセッションの依存関係
 def get_db():
     db = SessionLocal()
     try:
@@ -69,8 +68,8 @@ def update(book_id: int, book_update: BookUpdate, db: Session = Depends(get_db))
     db_book.author = book_data.author
     db_book.price = book_data.price
 
-    db.commit()  # 変更をコミット
-    db.refresh(db_book)  # 更新されたオブジェクトでセッションを更新
+    db.commit()
+    db.refresh(db_book)
 
     return db_book
 
@@ -80,7 +79,7 @@ def delete(book_id: int, db: Session = Depends(get_db)):
     if db_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
 
-    db.delete(db_book)  # オブジェクトを削除
-    db.commit()  # 変更をコミット
+    db.delete(db_book)
+    db.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
