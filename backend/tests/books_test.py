@@ -23,6 +23,21 @@ def override_get_db():
 
 app.dependency_overrides[get_db] = override_get_db
 
+# テスト関数
+def test_create_book():
+    response = client.post(
+        "/books",
+        json={
+            "book": {
+                "title": "Test Book",
+                "author": "Test Author",
+                "price": 100
+            }
+        }
+    )
+    assert response.status_code == 201
+    assert response.headers["Location"].startswith("/books/")
+
 def test_index():
     response = client.get("/books")
     assert response.status_code == 200
