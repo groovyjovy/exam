@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status, HTTPException, Response
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from db.database import SessionLocal, get_db
-from models.init import Book
+from models.init import Book, Review
 
 router = APIRouter()
 
@@ -67,7 +67,13 @@ def delete(book_id: int, db: Session = Depends(get_db)):
     if book is None:
         raise HTTPException(status_code=404, detail="Book not found")
 
+    reviews = db.query(Review).filter(Review.book_id == book_id).all()
+    for review in reviews:
+        db.delete(review)
+
     db.delete(book)
     db.commit()
+
+
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
