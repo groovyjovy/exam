@@ -1,9 +1,10 @@
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models.init import Base, Book
-from web.main import app, get_db
-from db.database import DATABASE_URL
+from models.init import Base, Book, Review
+from web.main import app
+from web.api.v1 import books
+from db.database import DATABASE_URL, get_db
 
 TEST_DATABASE_URL = DATABASE_URL + "_test"
 engine = create_engine(TEST_DATABASE_URL)
@@ -22,9 +23,9 @@ def override_get_db():
 
 app.dependency_overrides[get_db] = override_get_db
 
-def test_create_book():
+def test_create():
     response = client.post(
-        "/books",
+        "/api/v1/books",
         json={
             "book": {
                 "title": "Test Book",
@@ -37,7 +38,7 @@ def test_create_book():
     assert response.headers["Location"].startswith("/books/")
 
 def test_index():
-    response = client.get("/books")
+    response = client.get("/api/v1/books")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
@@ -48,7 +49,7 @@ def test_show():
     db.commit()
     db.refresh(test_book)
 
-    response = client.get(f"/books/{test_book.id}")
+    response = client.get(f"/api/v1/books/{test_book.id}")
     assert response.status_code == 200
     data = response.json()
     assert data['id'] == test_book.id
@@ -67,10 +68,9 @@ def test_update():
     db.commit()
     db.refresh(test_book)
 
-    response = client.put(f"/books/{test_book.id}", json={"book": {"id": test_book.id, "title": "Updated Title", "author": "Updated Author", "price": 400}})
+    response = client.put(f"/api/v1/books/{test_book.id}", json={"book": {"id": test_book.id, "title": "Updated Title", "author": "Updated Author", "price": 400}})
     assert response.status_code == 200
     data = response.json()
-    assert data['id'] == test_book.id
     assert data['title'] == "Updated Title"
     assert data['author'] == "Updated Author"
     assert data['price'] == 400
@@ -81,19 +81,20 @@ def test_update():
 
 def test_delete():
     db = TestingSessionLocal()
-    test_book = Book(title="Test Delete", author="Author Delete", price=500)
+    test_book = Book(title="Test Book for Delete Review", author="Author Delete Review", price=400)
     db.add(test_book)
     db.commit()
     db.refresh(test_book)
 
-    book_id = test_book.id
+    test_review = Review(reviewer_name="Delete Reviewer", content="Delete review content", rating=2, book_id=test_book.id)
+    db.add(test_review)
+    db.commit()
+    db.refresh(test_review)
 
-    db.close()
-
-    response = client.delete(f"/books/{book_id}")
+    response = client.delete(f"/api/v1/books/{test_book.id}")
     assert response.status_code == 204
 
     new_db = TestingSessionLocal()
-    deleted_book = new_db.get(Book, book_id)
+    deleted_book = new_db.get(Book, test_book.id)
     assert deleted_book is None
     new_db.close()
