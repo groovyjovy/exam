@@ -1,10 +1,23 @@
 from fastapi import FastAPI, Depends, status, HTTPException, Response
+from starlette.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from db.database import SessionLocal
 from models.init import Book
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:4000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,  # 'allow_creditionals' から 'allow_credentials' に修正
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 class BookCreateData(BaseModel):
     title: str
