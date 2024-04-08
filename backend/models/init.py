@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, CheckConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import declarative_base
 from datetime import datetime, timezone
@@ -38,6 +38,11 @@ class Review(Base):
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
     book = relationship('Book', back_populates='reviews')
+
+    __table_args__ = (
+        CheckConstraint(rating >= 1, name='check_rating_min'),
+        CheckConstraint(rating <= 5, name='check_rating_max'),
+    )
 
 class BookTag(Base):
     __tablename__ = 'book_tag'
