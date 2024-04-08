@@ -1,19 +1,17 @@
 from fastapi import APIRouter, Depends, status, HTTPException, Response
 from sqlalchemy.orm import Session
 from models.init import Book, Review
-from db.database import SessionLocal, get_db
-from schemas.reviews import ReviewCreate, ReviewCreateData, ReviewUpdate, ReviewUpdateData
+from db.database import get_db
+from schemas.reviews import ReviewCreate, ReviewCreateData, ReviewUpdateData
 
 router = APIRouter()
 
 @router.post("", status_code=status.HTTP_201_CREATED)
 def create(book_id: int, review_create: ReviewCreate, response: Response, db: Session = Depends(get_db)):
-    # 書籍が存在するか確認
     book = db.get(Book, book_id)
     if not book:
         raise HTTPException(status_code=404,  detail="Book not found")
 
-    # レビューモデルのインスタンスを作成
     review_data = review_create.review
     review = Review(reviewer_name=review_data.reviewer_name, content=review_data.content, rating=review_data.rating, book_id=book_id)
 

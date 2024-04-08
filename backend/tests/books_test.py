@@ -3,7 +3,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.init import Base, Book, Review
 from web.main import app
-from web.api.v1 import books
 from db.database import DATABASE_URL, get_db
 
 TEST_DATABASE_URL = DATABASE_URL + "_test"
@@ -38,6 +37,11 @@ def test_create():
     assert response.headers["Location"].startswith("/books/")
 
 def test_index():
+    db = TestingSessionLocal()
+    test_book = Book(title="Test Show", author="Author Show", price=200)
+    db.add(test_book)
+    db.commit()
+    db.refresh(test_book)
     response = client.get("/api/v1/books")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
