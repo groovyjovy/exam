@@ -2,26 +2,9 @@ from fastapi import APIRouter, Depends, status, HTTPException, Response
 from sqlalchemy.orm import Session
 from models.init import Book, Review
 from db.database import SessionLocal, get_db
-from pydantic import BaseModel
+from schemas.reviews import ReviewCreate, ReviewCreateData, ReviewUpdate, ReviewUpdateData
 
 router = APIRouter()
-
-class ReviewCreateData(BaseModel):
-    reviewer_name: str
-    content: str
-    rating: int
-
-class ReviewCreate(BaseModel):
-    review: ReviewCreateData
-
-class ReviewUpdateData(BaseModel):
-    id: int
-    reviewer_name: str
-    content: str
-    rating: int
-
-class ReviewUpdate(BaseModel):
-    review: ReviewCreateData
 
 @router.post("", status_code=status.HTTP_201_CREATED)
 def create(book_id: int, review_create: ReviewCreate, response: Response, db: Session = Depends(get_db)):

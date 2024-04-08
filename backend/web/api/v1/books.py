@@ -1,27 +1,10 @@
 from fastapi import APIRouter, Depends, status, HTTPException, Response
-from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from db.database import SessionLocal, get_db
 from models.init import Book, Review
+from schemas.books import BookCreate, BookCreateData, BookUpdate, BookUpdateData
 
 router = APIRouter()
-
-class BookCreateData(BaseModel):
-    title: str
-    author: str
-    price: int
-
-class BookCreate(BaseModel):
-    book: BookCreateData
-
-class BookUpdateData(BaseModel):
-    id: int
-    title: str
-    author: str
-    price: int
-
-class BookUpdate(BaseModel):
-    book: BookUpdateData
 
 @router.post("", status_code=status.HTTP_201_CREATED)
 def create(book_create: BookCreate, response: Response, db: Session = Depends(get_db)):
