@@ -3,7 +3,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.init import Base, Book, Review
 from web.main import app
-from web.api.v1 import books
 from db.database import DATABASE_URL, get_db
 
 TEST_DATABASE_URL = DATABASE_URL + "_test"
