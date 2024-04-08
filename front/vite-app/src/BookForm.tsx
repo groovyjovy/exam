@@ -30,7 +30,7 @@ const BookForm = ({ mode }: BookFormProps) => {
     event.preventDefault();
     const bookData = { title, author, price: Number(price) };
 
-    const endpoint = mode === 'create' ? 'http://localhost:8081/api/vi/books' : `http://localhost:8081/api/v1/books/${id}`;
+    const endpoint = mode === 'create' ? 'http://localhost:8081/api/v1/books' : `http://localhost:8081/api/v1/books/${id}`;
     const method = mode === 'create' ? 'POST' : 'PUT';
 
     fetch(endpoint, {
