@@ -12,7 +12,7 @@ const BookList = () => {
   const [books, setBooks] = useState<Book[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:8081/books')
+    fetch('http://localhost:8081/api/v1/books')
       .then(response => response.json())
       .then(data => setBooks(data));
   }, []);
