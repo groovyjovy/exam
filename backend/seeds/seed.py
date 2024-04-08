@@ -1,9 +1,6 @@
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import sessionmaker
 from models.init import Book, Review
 from db.database import SessionLocal
 
-# シードデータを挿入する関数
 def seed_data():
     db = SessionLocal()
     book1 = Book(title="Book 1", author="Author 1", price=100)
@@ -22,6 +19,5 @@ def seed_data():
     db.commit()
     db.close()
 
-# シードデータ挿入スクリプトを実行
 if __name__ == "__main__":
     seed_data()
