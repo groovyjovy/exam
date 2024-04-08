@@ -1,8 +1,9 @@
 # web/main.py
 from fastapi import FastAPI
 from .api.v1.books import router as book_router
-from starlette.middleware.cors import CORSMiddleware
 from .api.v1.reviews import router as review_router
+from starlette.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
 
