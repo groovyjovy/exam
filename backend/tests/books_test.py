@@ -37,6 +37,11 @@ def test_create():
     assert response.headers["Location"].startswith("/books/")
 
 def test_index():
+    db = TestingSessionLocal()
+    test_book = Book(title="Test Show", author="Author Show", price=200)
+    db.add(test_book)
+    db.commit()
+    db.refresh(test_book)
     response = client.get("/api/v1/books")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
