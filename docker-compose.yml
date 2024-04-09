@@ -15,7 +15,7 @@ services:
       - ./backend:/app
     ports:
       - 8081:8000
-    command: bash
+    command: poetry run uvicorn web.main:app --host 0.0.0.0 --reload
     tty: true
   db:
     image: mysql:8.0
@@ -34,7 +34,7 @@ services:
     build:
       context: ./front/
       dockerfile: Dockerfile
-    # command: sh -c "cd vite-app && npm run dev"
+    command: sh -c "cd vite-app && npm run dev"
     ports:
       - 4000:5173
     volumes:

@@ -5,18 +5,16 @@
 
 ## 環境構築
 - 前提条件
+    - `docker compose`コマンドを実行できる
 1. コンテナをビルド、立ち上げ
     ```
     docker compose up -d
     ```
-2. コンテナに入る
+2. サンプルデータのセットアップ
     ```
-    docker compose exec api bash
+    docker compose exec api sh -c 'python seeds/seed.py'
     ```
-3. サーバーを起動
-    ```
-    poetry run uvicorn src.main:app --host 0.0.0.0 --reload
-    ```
+3. [ページ](http://localhost:4000/books)にアクセス
 
 ### DBのmigration実行方法
 
@@ -36,33 +34,18 @@
     select * from  alembic_version;
     ```
 
-## なんとなくの構成、というか盛り込みたい要素
-- logをs3に出す
-- lamdaでfastapiを動作させる
-- s3にvite + reactのspaアプリケーションをアップロードする
-    - S3にアップロードしたアプリケーションからauthenticateヘッダーを利用して認証を行う。BASICで
-- MUIを利用して効率的にコンポーネントを開発する
-- DB設計書を書く。クラス図は簡単なものなので特に書かなくていいかな...
-- インフラ構成図を書く。サーバーレスで作成する場合、elbとかは特に書かなくていい？
-- OpenAPIに則って書いた方が良い？
-- pytestでテストを書く
+### テストの実行方法
+- DBの作成、設定
+    ```
+    docker compose exec db mysql -u root -psecret -e "CREATE DATABASE exam_test; GRANT ALL PRIVILEGES ON exam_test.* TO 'user'@'%'; FLUSPRIVILEGE"
+    ```
+- コマンドを実行
+    ```
+    docker compose exec api sh -c 'poetry run pytest'   
+    ```
 
-## スケジュール
-- 4/2(火)
-    - 環境構築。ハロワまで行きたい
-- 4/3(水)
-    - ローカルのDBとの接続。DB設計
-- 4/4(木)
-    - CRUDAPIの作成
-- 4/5(金)
-    - CRUDAPIの作成
-- 4/6(土)
-    - フロントの作成
-- 4/7(日)
-    - 本番環境の作成
-- 4/8(月)
-    - 本番環境の作成
-- 4/9(火)
-    - ドキュメントの作成と提出
-- 4/10(水)
-    - 面談
+### lintの実行
+- コマンドを実行
+    ```
+    docker compose exec api sh -c 'poetry run ruff check'
+    ```
