@@ -39,6 +39,6 @@ services:
       - 4000:5173
     volumes:
       - ./front:/app
-      - /app/node_modules
+      - /app/vite-app/node_modules
     stdin_open: true
     tty: true
