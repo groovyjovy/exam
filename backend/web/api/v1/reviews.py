@@ -31,7 +31,7 @@ def index(book_id: int, db: Session = Depends(get_db)):
     reviews = book.reviews
     return reviews
 
-@router.get("/{review_id}", response_model=ReviewUpdateData, status_code=status.HTTP_200_OK)
+@router.get("/{review_id}", response_model=ReviewCreateData, status_code=status.HTTP_200_OK)
 def show(book_id: int, review_id: int, db: Session = Depends(get_db)):
     book = db.get(Book, book_id)
     if not book:

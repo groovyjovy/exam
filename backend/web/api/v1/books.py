@@ -22,7 +22,7 @@ def index(db: Session = Depends(get_db)):
     books = db.query(Book).all()
     return books
 
-@router.get("/{book_id}", response_model=BookUpdateData, status_code=status.HTTP_200_OK)
+@router.get("/{book_id}", response_model=BookCreateData, status_code=status.HTTP_200_OK)
 def show(book_id: int, db: Session = Depends(get_db)):
     book = db.get(Book, book_id)
     if book is None:
