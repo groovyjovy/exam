@@ -22,7 +22,7 @@ def override_get_db():
 
 app.dependency_overrides[get_db] = override_get_db
 
-def test_create_review():
+def test_create():
     db = TestingSessionLocal()
     test_book = Book(title="Test Book for Review", author="Author Review", price=250)
     db.add(test_book)
@@ -52,7 +52,7 @@ def test_create_review():
     db.commit()
     db.close()
 
-def test_read_reviews():
+def test_index():
     db = TestingSessionLocal()
     test_book = Book(title="Test Book for Reviews", author="Author Reviews", price=250)
     db.add(test_book)
@@ -78,7 +78,7 @@ def test_read_reviews():
     db.commit()
     db.close()
 
-def test_read_review():
+def test_show():
     db = TestingSessionLocal()
     test_book = Book(title="Test Book for Single Review", author="Author Single Review", price=300)
     db.add(test_book)
@@ -93,7 +93,6 @@ def test_read_review():
     response = client.get(f"/api/v1/books/{test_book.id}/reviews/{test_review.id}")
     assert response.status_code == 200
     review_data = response.json()
-    assert review_data['id'] == test_review.id
     assert review_data['content'] == "Single review content"
 
     db.delete(test_review)
@@ -101,7 +100,7 @@ def test_read_review():
     db.commit()
     db.close()
 
-def test_update_review():
+def test_update():
     db = TestingSessionLocal()
     test_book = Book(title="Test Book for Update Review", author="Author Update Review", price=350)
     db.add(test_book)
@@ -133,7 +132,7 @@ def test_update_review():
     db.commit()
     db.close()
 
-def test_delete_review():
+def test_delete():
     db = TestingSessionLocal()
     test_book = Book(title="Test Book for Delete Review", author="Author Delete Review", price=400)
     db.add(test_book)

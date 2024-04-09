@@ -5,64 +5,59 @@
 
 ## 環境構築
 - 前提条件
-1. コンテナをビルド、立ち上げ
+    - `docker compose`コマンドを実行できる
+
+1. リポジトリをクローンし、examディレクトリへ移動する
     ```
+    git clonegit@github.com:groovyjovy/exam.git
+    ```
+
+2. コンテナをビルド、立ち上げ
+    ``` bash
     docker compose up -d
     ```
-2. コンテナに入る
+
+3. サンプルデータのセットアップ
+    ``` bash
+     docker compose exec api sh -c 'alembic upgrade head && python seeds/seed.py'
     ```
-    docker compose exec api bash
-    ```
-3. サーバーを起動
-    ```
-    poetry run uvicorn src.main:app --host 0.0.0.0 --reload
-    ```
+
+4. [ページ](http://localhost:4000/books)にアクセス
 
 ### DBのmigration実行方法
 
 - 最新バージョンへのmigarate。引数を変えればそのバージョンにmigrate可能
+    ``` bash
+    docker compose exec api sh -c 'alembic upgrade head'
     ```
-    alembic upgrade head
-    ```
+
 - migrationの初期化。引数を変えればそのバージョンにrollback可能
+    ``` bash
+    docker compose exec api sh -c 'alembic downgrade base'
     ```
-    alembic downgrade base
-    ```
+
 - 現在のバージョンの確認方法。DBを直接みても確認できる
+    ``` bash
+    docker compose exec api sh -c 'alembic history'
     ```
-    alembic history
-    ```
-    ```
+
+    ``` mysql
     select * from  alembic_version;
     ```
 
-## なんとなくの構成、というか盛り込みたい要素
-- logをs3に出す
-- lamdaでfastapiを動作させる
-- s3にvite + reactのspaアプリケーションをアップロードする
-    - S3にアップロードしたアプリケーションからauthenticateヘッダーを利用して認証を行う。BASICで
-- MUIを利用して効率的にコンポーネントを開発する
-- DB設計書を書く。クラス図は簡単なものなので特に書かなくていいかな...
-- インフラ構成図を書く。サーバーレスで作成する場合、elbとかは特に書かなくていい？
-- OpenAPIに則って書いた方が良い？
-- pytestでテストを書く
+### テストの実行方法
+- DBの作成、設定
+    ``` bash
+    docker compose exec db mysql -u root -psecret -e "CREATE DATABASE exam_test; GRANT ALL PRIVILEGES ON exam_test.* TO 'user'@'%'; FLUSPRIVILEGE"
+    ```
 
-## スケジュール
-- 4/2(火)
-    - 環境構築。ハロワまで行きたい
-- 4/3(水)
-    - ローカルのDBとの接続。DB設計
-- 4/4(木)
-    - CRUDAPIの作成
-- 4/5(金)
-    - CRUDAPIの作成
-- 4/6(土)
-    - フロントの作成
-- 4/7(日)
-    - 本番環境の作成
-- 4/8(月)
-    - 本番環境の作成
-- 4/9(火)
-    - ドキュメントの作成と提出
-- 4/10(水)
-    - 面談
+- コマンドを実行
+    ``` bash
+    docker compose exec api sh -c 'poetry run pytest'   
+    ```
+
+### lintの実行
+- コマンドを実行
+    ``` bash
+    docker compose exec api sh -c 'poetry run ruff check'
+    ```
