@@ -12,7 +12,7 @@
     ```
 2. サンプルデータのセットアップ
     ```
-    docker compose exec api sh -c 'python seeds/seed.py'
+     docker compose exec api sh -c 'alembic upgrade head && python seeds/seed.py'
     ```
 3. [ページ](http://localhost:4000/books)にアクセス
 
