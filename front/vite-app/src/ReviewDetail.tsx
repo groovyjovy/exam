@@ -48,7 +48,7 @@ const ReviewDetail = () => {
               Rating: {review.rating}
             </Typography>
             <Box mt={2}>
-              <Button variant="contained" color="primary" component={Link} to={`/books/${bookId}/reviews/${review.id}/edit`}>
+              <Button variant="contained" color="primary" component={Link} to={`/books/${bookId}/reviews/${reviewId}/edit`}>
                 編集
               </Button>
               <Button variant="contained" color="secondary" onClick={handleDelete} style={{ marginLeft: '16px' }}>

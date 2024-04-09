@@ -61,7 +61,7 @@ const BookDetail = () => {
             <ReviewListInBookDetail reviews={reviews} bookId={id} />
 
             <Box mt={2}>
-              <Button variant="contained" color="primary" component={Link} to={`/books/${book.id}/edit`}>
+              <Button variant="contained" color="primary" component={Link} to={`/books/${id}/edit`}>
                 編集
               </Button>
               <Button variant="contained" color="secondary" onClick={handleDelete} style={{ marginLeft: '16px' }}>

@@ -9,7 +9,7 @@
 
 1. リポジトリをクローンし、examディレクトリへ移動する
     ```
-    git clonegit@github.com:groovyjovy/exam.git
+    git clone git@github.com:groovyjovy/exam.git && cd exam
     ```
 
 2. コンテナをビルド、立ち上げ
@@ -19,7 +19,7 @@
 
 3. サンプルデータのセットアップ
     ``` bash
-     docker compose exec api sh -c 'alembic upgrade head && python seeds/seed.py'
+    docker compose exec api sh -c 'alembic upgrade head && python seeds/seed.py'
     ```
 
 4. [ページ](http://localhost:4000/books)にアクセス
